@@ -1,56 +1,60 @@
-
 #include <Servo.h>
-#define motorBase 12//Pin de la base
-#define motorDerecho 11 //Pin del motor derecho
-#define motorIzquierdo 10 //Pin de la izquierda
-#define motorMano 9//Pin de la mano
-Servo Base; //Servomotor de la base
-Servo Derecho; //Servomotor derecha
-Servo Izquierdo;//Servomotor Izquierda
-Servo Mano;//Servomotor de la mano
+#include <SoftwareSerial.h>
+#define motorBase 12//Declaro el pin de la base
+#define motorDerecho 11 //Declaro el pin del motor derecho
+#define motorIzquierdo 10 // Declaro el pin de la izquierda
+#define motorMano 9// Declaro el pin de la mano
+Servo Base; //Declaro el servomotor de la base
+Servo Derecho; //Declaro servomotor derecha
+Servo Izquierdo;// Declaro el servomotor Izquierda
+Servo Mano;//Declaro el servomotor de la mano
+SoftwareSerial BT(2,3);
+int angulo =0,B=0,D=0,I=0,M=0;
+char motor;
 void setup() {
-  // put your setup code here, to run once:
- // Serial.begin(9600);
-
+  Serial.begin(9600);
   Derecho.attach(motorDerecho);//Inicializamos el servo
   Izquierdo.attach(motorIzquierdo);
-   Base.attach(motorBase);
-   Mano.attach(motorMano);
- 
-  Base.write(90);
-   delay(1000);
-   Base.write(180);
-  delay(1000);
-   Base.write(0);
-   delay(1000);
-   
-   Mano.write(0);
-   delay(5000);
+  Base.attach(motorBase);
+  Mano.attach(motorMano);  
 
-   Mano.write(0);
-   delay(1000);
-
-   Derecho.write(180);
-  delay(1000);
-   Derecho.write(120);
-  delay(1000);
-   Derecho.write(100);
-   delay(1000);
-
-
-   Izquierdo.write(0);
-   delay(1000);
-   Izquierdo.write(0);
-  delay(1000);
-   Izquierdo.write(0);
-   delay(1000);
-   
-
-
-  
 }
 
+
 void loop() {
-  // put your main code here, to run repeatedly:
-   
+//  Inicial();
+  Leer_Dato();
+  switch (motor){
+    case 'B':
+    B=angulo;
+    break;
+    case 'M':
+    M=angulo;
+    break;
+    case 'D':
+    D=angulo;
+    break;
+    case 'I':
+    I=angulo;
+    break;
+  }
+  Base.write(B);
+  Mano.write(M);
+  Derecho.write(D);
+  Izquierdo.write(I);
+  delay(15);
+  }
+  void Leer_Dato(){
+    if(Serial.available()>0){
+      motor =Serial.read();
+      angulo=Serial.parseInt();
     }
+  }
+  /*void Inicial(){
+    int B=(0);
+    M=(20);
+    D=(70);
+    I=(70);
+    
+  }*/
+   
